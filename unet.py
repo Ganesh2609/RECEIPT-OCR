@@ -4,20 +4,17 @@ from torch import nn
 # Encoder
 class EncoderBlock(nn.Module):
     
-    def __init__(self, in_channels, out_channels, channel_ratio=1, kernel_size=3, padding=1):
+    def __init__(self, in_channels, out_channels, kernel_size=3, padding=1):
         super(EncoderBlock, self).__init__()
-        self.conv1 = self.conv_block(in_channels, out_channels, channel_ratio, kernel_size, padding)
-        self.conv2 = self.conv_block(out_channels, out_channels, channel_ratio, kernel_size, padding)
+        self.conv1 = self.conv_block(in_channels, out_channels, kernel_size, padding)
         self.residual_conv = nn.Sequential(
             nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1),
             nn.BatchNorm2d(num_features=out_channels)
         )
         
-    def conv_block(self, in_channels, out_channels, channel_ratio, kernel_size, padding):
+    def conv_block(self, in_channels, out_channels, kernel_size, padding):
         return nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=in_channels*channel_ratio, kernel_size=kernel_size, stride=1, padding=padding, groups=in_channels),
-            nn.BatchNorm2d(num_features=in_channels*channel_ratio),
-            nn.Conv2d(in_channels=in_channels*channel_ratio, out_channels=out_channels, kernel_size=kernel_size, stride=1, padding=padding),
+            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=1, padding=padding),
             nn.BatchNorm2d(num_features=out_channels),
             nn.ReLU(),
             nn.Dropout()
@@ -26,7 +23,6 @@ class EncoderBlock(nn.Module):
     def forward(self, x):
         residual = self.residual_conv(x)
         x = self.conv1(x)
-        x = self.conv2(x)
         x = x +  residual 
         return x                
      
@@ -34,20 +30,16 @@ class EncoderBlock(nn.Module):
 # Decoder 
 class DecoderBlock(nn.Module):
     
-    def __init__(self, in_channels, out_channels, channel_ratio=1, kernel_size=3, padding=1):
+    def __init__(self, in_channels, out_channels, kernel_size=3, padding=1):
         super(DecoderBlock, self).__init__()
         self.conv1 = nn.Sequential(
-            nn.ConvTranspose2d(in_channels=in_channels, out_channels=out_channels*channel_ratio, kernel_size=2, stride=2, padding=0),
-            nn.BatchNorm2d(num_features=out_channels*channel_ratio),
-            nn.Conv2d(in_channels=out_channels*channel_ratio, out_channels=out_channels, kernel_size=kernel_size, stride=1, padding=padding),
+            nn.ConvTranspose2d(in_channels=in_channels, out_channels=out_channels, kernel_size=2, stride=2, padding=0),
             nn.BatchNorm2d(num_features=out_channels),
             nn.ReLU(),
             nn.Dropout()
         )
         self.conv2 = nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=in_channels*channel_ratio, kernel_size=kernel_size, stride=1, padding=padding, groups=in_channels),
-            nn.BatchNorm2d(num_features=in_channels*channel_ratio),
-            nn.Conv2d(in_channels=in_channels*channel_ratio, out_channels=out_channels, kernel_size=kernel_size, stride=1, padding=padding),
+            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=1, padding=padding),
             nn.BatchNorm2d(num_features=out_channels),
             nn.ReLU(),
             nn.Dropout()
@@ -70,20 +62,17 @@ class DecoderBlock(nn.Module):
 # Bottleneck
 class BottleNeckBlock(nn.Module):
     
-    def __init__(self, in_channels, out_channels, channel_ratio=1, kernel_size=3, padding=1):
+    def __init__(self, in_channels, out_channels, kernel_size=3, padding=1):
         super(BottleNeckBlock, self).__init__()
-        self.conv1 = self.conv_block(in_channels, in_channels, channel_ratio, kernel_size, padding)
-        self.conv2 = self.conv_block(in_channels, out_channels, channel_ratio, kernel_size, padding)
+        self.conv1 = self.conv_block(in_channels, out_channels,kernel_size, padding)
         self.residual_conv = nn.Sequential(
             nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1),
             nn.BatchNorm2d(num_features=out_channels),
         )
     
-    def conv_block(self, in_channels, out_channels, channel_ratio, kernel_size, padding):
+    def conv_block(self, in_channels, out_channels, kernel_size, padding):
         return nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=in_channels*channel_ratio, kernel_size=kernel_size, stride=1, padding=padding, groups=in_channels),
-            nn.BatchNorm2d(num_features=in_channels*channel_ratio),
-            nn.Conv2d(in_channels=in_channels*channel_ratio, out_channels=out_channels, kernel_size=kernel_size, stride=1, padding=padding),
+            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=1, padding=padding),
             nn.BatchNorm2d(num_features=out_channels),
             nn.ReLU(),
             nn.Dropout()
@@ -92,7 +81,6 @@ class BottleNeckBlock(nn.Module):
     def forward(self, x):
         residual = self.residual_conv(x)
         x = self.conv1(x)
-        x = self.conv2(x)
         x = x + residual 
         return x
 
@@ -139,24 +127,24 @@ class UNet(nn.Module):
         super(UNet, self).__init__()
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
         
-        self.encoder1 = EncoderBlock(in_channels=in_channels, out_channels=64)
-        self.encoder2 = EncoderBlock(in_channels=64, out_channels=128)
-        self.encoder3 = EncoderBlock(in_channels=128, out_channels=256)
-        self.encoder4 = EncoderBlock(in_channels=256, out_channels=512)
+        self.encoder1 = EncoderBlock(in_channels=in_channels, out_channels=32)
+        self.encoder2 = EncoderBlock(in_channels=32, out_channels=64)
+        self.encoder3 = EncoderBlock(in_channels=64, out_channels=128)
+        self.encoder4 = EncoderBlock(in_channels=128, out_channels=256)
         
-        self.bottleneck = BottleNeckBlock(in_channels=512, out_channels=1024)
+        self.bottleneck = BottleNeckBlock(in_channels=256, out_channels=512)
 
-        self.att1 = AttentionBlock(in_channels=1024, g_channels=512)
-        self.att2 = AttentionBlock(in_channels=512, g_channels=256)
-        self.att3 = AttentionBlock(in_channels=256, g_channels=128)
-        self.att4 = AttentionBlock(in_channels=128, g_channels=64)
+        self.att1 = AttentionBlock(in_channels=512, g_channels=256)
+        self.att2 = AttentionBlock(in_channels=256, g_channels=128)
+        self.att3 = AttentionBlock(in_channels=128, g_channels=64)
+        self.att4 = AttentionBlock(in_channels=64, g_channels=32)
         
-        self.decoder1 = DecoderBlock(in_channels=1024, out_channels=512)
-        self.decoder2 = DecoderBlock(in_channels=512, out_channels=256)
-        self.decoder3 = DecoderBlock(in_channels=256, out_channels=128)
-        self.decoder4 = DecoderBlock(in_channels=128, out_channels=64)
+        self.decoder1 = DecoderBlock(in_channels=512, out_channels=256)
+        self.decoder2 = DecoderBlock(in_channels=256, out_channels=128)
+        self.decoder3 = DecoderBlock(in_channels=128, out_channels=64)
+        self.decoder4 = DecoderBlock(in_channels=64, out_channels=32)
         
-        self.output_conv = nn.Conv2d(in_channels=64, out_channels=out_channels, kernel_size=1, stride=1, padding=0)
+        self.output_conv = nn.Conv2d(in_channels=32, out_channels=out_channels, kernel_size=1, stride=1, padding=0)
 
     
     def forward(self, x):

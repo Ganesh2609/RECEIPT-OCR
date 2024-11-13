@@ -1,1 +1,1 @@
-# KIE_SDMGR
+# KIE SDMGR

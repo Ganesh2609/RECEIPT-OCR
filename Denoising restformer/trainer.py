@@ -48,7 +48,7 @@ def train_models(model:torch.nn.Module,
         with tqdm(enumerate(dataloader), total=len(dataloader)) as t:
             
             for i, batch in t:    
-            
+                
                 batch_loss = train_batch(model=model,
                                          batch=batch,
                                          loss_fn=loss_fn,

@@ -21,8 +21,9 @@ class Grapher:
         self.filename = filename
         self.data_fd = data_fd
 
-        file_path = os.path.join(self.data_fd, "raw/box", filename + '.csv')
+        file_path = os.path.join(self.data_fd, "raw/box cleaned", filename + '.csv')
         interim_path = os.path.join(self.data_fd, "interim", filename + '.csv')
+        print(f"Processing file: {file_path}")
         image_path = os.path.join(self.data_fd, "raw/img", filename + '.jpg')
         self.df = pd.read_csv(file_path, header=None, dtype=str)
         self.image = cv2.imread(image_path)
@@ -426,10 +427,10 @@ class Grapher:
 
 
 if __name__ == "__main__":
-    path = '../dataset/sroie-2019/raw/box/'
+    path = 'sroie-2019/raw/box cleaned/'
 
     file_list = [i.split('.')[0] for i in os.listdir(path) if i.endswith('.csv')]
     for file in file_list:
-        connect = Grapher(file, data_fd="../dataset/sroie-2019")
+        connect = Grapher(file, data_fd="sroie-2019")
         G, result, df = connect.graph_formation(export_graph=True)
         df = connect.relative_distance(export_document_graph=True)

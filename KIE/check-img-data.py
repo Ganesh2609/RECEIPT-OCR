@@ -1,7 +1,7 @@
 import os
 
-img_path = 'D:/study/dataset/sroie-2019/raw/img'
-box_path = 'D:/study/dataset/sroie-2019/raw/box'
+img_path = 'sroie-2019/raw/img'
+box_path = 'sroie-2019/raw/box'
 
 img_files = [i.split('.')[0] for i in os.listdir(img_path) if i.endswith('.jpg')]
 box_files = [i.split('.')[0] for i in os.listdir(box_path) if i.endswith('.csv')]

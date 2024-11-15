@@ -6,7 +6,7 @@ import pandas as pd
 valid_chars = ascii_uppercase + digits + punctuation + " \t\n"
 
 csv_files = sorted(
-    (f for f in scandir(r"D:\study\dataset\sroie-2019\raw\box") if f.name.endswith("csv")), key=lambda f: f.name
+    (f for f in scandir(r"sroie-2019\raw\box") if f.name.endswith("csv")), key=lambda f: f.name
 )
 
 for f in csv_files:
@@ -19,5 +19,5 @@ for f in csv_files:
                     print(f"Invalid char {repr(c)} in {f.name} on line {line_no}")
             line_list.append(entries)
         df = pd.DataFrame(line_list)
-        df.to_csv('New folder/' + f.name, index=False, header=None)
+        df.to_csv('sroie-2019/raw/box updated/' + f.name, index=False, header=None)
 

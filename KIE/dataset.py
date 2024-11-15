@@ -27,8 +27,8 @@ def get_data(save_fd):
         - y (Tensor, optional) – Graph or node targets with arbitrary shape. (default: None)
         - validation mask, training mask and testing mask
     """
-    data_fd = '../dataset/sroie-2019'
-    path = '../dataset/sroie-2019/raw/box'
+    data_fd = 'sroie-2019'
+    path = 'sroie-2019/raw/box cleaned'
     files = [i.split('.')[0] for i in os.listdir(path)]
     files.sort()
     all_files = files[1:]
@@ -98,5 +98,5 @@ def get_data(save_fd):
     torch.save(test_data, os.path.join(save_fd, 'test_data.dataset'))
 
 
-get_data(save_fd='../dataset/sroie-2019/processed')
+get_data(save_fd='dataset/sroie-2019/processed')
 

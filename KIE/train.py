@@ -13,7 +13,7 @@ def load_train_test_split(save_fd):
     return train_data, test_data
 
 
-train_data, test_data = load_train_test_split(save_fd='../dataset/sroie-2019/processed')
+train_data, test_data = load_train_test_split(save_fd='sroie-2019/processed')
 
 model = InvoiceGCN(input_dim=train_data.x.shape[1], chebnet=True)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

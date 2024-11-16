@@ -21,11 +21,11 @@ class Grapher:
         self.filename = filename
         self.data_fd = data_fd
 
-        file_path = os.path.join(self.data_fd, "raw/box cleaned", filename + '.csv')
+        file_path = os.path.join(self.data_fd, "raw/box", filename + '.csv')
         interim_path = os.path.join(self.data_fd, "interim", filename + '.csv')
-        print(f"Processing file: {file_path}")
         image_path = os.path.join(self.data_fd, "raw/img", filename + '.jpg')
         self.df = pd.read_csv(file_path, header=None, dtype=str)
+        # print(image_path)
         self.image = cv2.imread(image_path)
         self.df_withlabels = pd.read_csv(interim_path)
 
@@ -240,16 +240,20 @@ class Grapher:
                 os.makedirs('figures/graphs')
 
             plot_path = 'figures/graphs/' + self.filename + 'plain_graph' '.jpg'
-            print(plot_path)
+            # print(plot_path)
             layout = nx.kamada_kawai_layout(G)
             layout = nx.spring_layout(G)
             nx.draw_networkx(G, layout, with_labels=True)
             plt.savefig(plot_path, format="PNG", dpi=600)
             plt.clf()
             # plt.show()
-
+        # print(G,result, df)
         # connect with the interim file that has labels in it
-        df['labels'] = self.df_withlabels['9']
+        # print(self.df_withlabels)
+        # print(self.df_withlabels['company'])
+        # df['labels'] = self.df_withlabels['9']
+        df = df.merge(self.df_withlabels, left_on='Object', right_on='value', how='left').drop('value', axis=1).rename(columns={'label': 'labels'})
+        # print(df)
         self.df = df
         return G, result, df
 
@@ -427,7 +431,7 @@ class Grapher:
 
 
 if __name__ == "__main__":
-    path = 'sroie-2019/raw/box cleaned/'
+    path = 'sroie-2019/raw/box/'
 
     file_list = [i.split('.')[0] for i in os.listdir(path) if i.endswith('.csv')]
     for file in file_list:

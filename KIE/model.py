@@ -5,18 +5,10 @@ from torch_geometric.nn import ChebConv
 
 
 class InvoiceGCN(torch.nn.Module):
-    """
-    This code demonstrate GCN model used in this task, includes:
-    - GCN module (Semi-Supervised Node Classification paper)
-    - Chebyshev-GCN (Invoice-GCN paper)
-    """
 
     def __init__(self, input_dim, chebnet=False, K=3, n_classes=5, dropout_rate=0.3):
-        """
 
-        :type input_dim: object
-        """
-        super().__init__()
+        super(InvoiceGCN, self).__init__()
 
         self.input_dim = input_dim
         self.n_classes = n_classes
@@ -34,7 +26,7 @@ class InvoiceGCN(torch.nn.Module):
             self.conv4 = GCNConv(16, self.n_classes, improved=True)
 
     def forward(self, data):
-        # for transductive setting with full-batch update
+
         x, edge_index, edge_weight = data.x, data.edge_index, data.edge_attr
 
         x = F.dropout(F.relu(self.conv1(x, edge_index, edge_weight)), p=self.dropout_rate, training=self.training)

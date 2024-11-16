@@ -28,7 +28,7 @@ def get_data(save_fd):
         - validation mask, training mask and testing mask
     """
     data_fd = 'sroie-2019'
-    path = 'sroie-2019/raw/box cleaned'
+    path = 'sroie-2019/raw/box'
     files = [i.split('.')[0] for i in os.listdir(path)]
     files.sort()
     all_files = files[1:]
@@ -42,7 +42,10 @@ def get_data(save_fd):
     # Get 550 receipts for training
     training, testing = files[:550], files[550:]
 
-    for file in tqdm(all_files):
+    # Main progress bar for overall processing
+    pbar = tqdm(total=len(all_files), desc="Processing files")
+    
+    for file in all_files:
         connect = Grapher(file, data_fd)
         G, _, _ = connect.graph_formation()
         df = connect.relative_distance()
@@ -52,9 +55,13 @@ def get_data(save_fd):
         feature_cols = ['rd_b', 'rd_r', 'rd_t', 'rd_l', 'line_number',
                         'n_upper', 'n_alpha', 'n_spaces', 'n_numeric', 'n_special']
 
-        text_features = np.array(df['Object'].map(make_sent_bert_features)).tolist()
+        # Add a nested progress bar for feature extraction
+        text_features = []
+        for text in tqdm(df['Object'], desc=f"Extracting features for {file}", leave=False):
+            text_features.append(make_sent_bert_features(text))
+        text_features = np.array(text_features)
+        
         numeric_features = df[feature_cols].values.astype(np.float32)
-
         features = np.concatenate((numeric_features, text_features), axis=1)
         features = torch.tensor(features)
 
@@ -70,8 +77,6 @@ def get_data(save_fd):
         df.loc[df['labels'] == 'date', 'num_labels'] = 3
         df.loc[df['labels'] == 'total', 'num_labels'] = 4
         df.loc[df['labels'] == 'undefined', 'num_labels'] = 5
-
-        # adding to test
         df.loc[df['labels'] == 'invoice', 'num_labels'] = 5
 
         assert df['num_labels'].isnull().values.any() == False, \
@@ -88,15 +93,22 @@ def get_data(save_fd):
             train_list_of_graphs.append(invidual_data)
         elif file in testing:
             test_list_of_graphs.append(invidual_data)
+            
+        pbar.update(1)
+    
+    pbar.close()
 
+    # Add progress bar for final data processing
+    print("Creating final datasets...")
     train_data = torch_geometric.data.Batch.from_data_list(train_list_of_graphs)
     train_data.edge_attr = None
     test_data = torch_geometric.data.Batch.from_data_list(test_list_of_graphs)
     test_data.edge_attr = None
 
+    print("Saving datasets...")
     torch.save(train_data, os.path.join(save_fd, 'train_data.dataset'))
     torch.save(test_data, os.path.join(save_fd, 'test_data.dataset'))
+    print("Done!")
 
 
-get_data(save_fd='dataset/sroie-2019/processed')
-
+get_data(save_fd='sroie-2019/processed')

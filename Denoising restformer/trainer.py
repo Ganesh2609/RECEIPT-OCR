@@ -41,7 +41,7 @@ def train_models(model:torch.nn.Module,
                 result_path:str=None
                 ):
     
-    for epoch in range(6, NUM_EPOCHS+6):
+    for epoch in range(8, NUM_EPOCHS+8):
         
         loss = 0
         
@@ -57,7 +57,7 @@ def train_models(model:torch.nn.Module,
                                          device=device)
                 loss += batch_loss
                 
-                t.set_description(f'Epoch [{epoch}/{NUM_EPOCHS+5}]')
+                t.set_description(f'Epoch [{epoch}/{NUM_EPOCHS+7}]')
                 t.set_postfix({
                     'Batch Loss' : batch_loss,
                     'Train Loss' : loss/(i+1)

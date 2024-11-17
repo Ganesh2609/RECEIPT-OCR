@@ -1,7 +1,9 @@
-__pycache__/
+__pycache__
 Denoising restformer/__pycache__
 Denoising restformer/data
 Denoising restformer/Models/
 SDMGR/__pycache__
 KIE/sroie-2019
 KIE/figures
+.env
+/LLM/database_checking.ipynb

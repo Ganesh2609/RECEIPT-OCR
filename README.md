@@ -12,7 +12,7 @@ This project implements a comprehensive receipt processing system that:
 
 ## 🏗️ Final Result
 
-![Denoising Results](Denoising%20restformer/Results/Epoch_22.png)
+![Final Result](sample.png)
 
 ### Pipeline Flow
 

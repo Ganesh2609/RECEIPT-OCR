@@ -10,7 +10,7 @@ This project implements a comprehensive receipt processing system that:
 - Extracts key information using SDMGR (Spatial Dual Modality Graph Reasoning)
 - Processes natural language queries and converts them to SQL using Gemini Pro LLM
 
-## 🏗️ Architecture
+## 🏗️ Final Result
 
 ![Denoising Results](Denoising%20restformer/Results/Epoch_22.png)
 

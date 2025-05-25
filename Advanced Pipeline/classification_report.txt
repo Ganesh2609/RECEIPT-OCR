@@ -1,0 +1,30 @@
+                     precision    recall  f1-score   support
+
+             Ignore     0.9856    0.9876    0.9866       969
+   Store_name_value     0.8217    0.8190    0.8203       591
+   Store_addr_value     0.8599    0.9016    0.8802       701
+          Tel_value     0.9196    0.9533    0.9362       300
+            Tel_key     0.9784    0.9444    0.9611       144
+         Date_value     0.9859    0.9546    0.9700       441
+           Date_key     0.9438    0.8750    0.9081        96
+         Time_value     0.9266    0.9758    0.9506       414
+           Time_key     0.9574    0.7377    0.8333        61
+    Prod_item_value     0.9247    0.9637    0.9438      2371
+      Prod_item_key     0.9062    0.8286    0.8657       105
+Prod_quantity_value     0.9716    0.9722    0.9719      1513
+  Prod_quantity_key     0.9750    0.8864    0.9286        88
+   Prod_price_value     0.9395    0.9806    0.9596      2263
+     Prod_price_key     0.9375    0.8333    0.8824       108
+     Subtotal_value     0.8100    0.6585    0.7265       369
+       Subtotal_key     0.9029    0.8064    0.8519       346
+          Tax_value     0.7674    0.7233    0.7447       365
+            Tax_key     0.9094    0.8361    0.8712       360
+         Tips_value     1.0000    0.0345    0.0667        29
+           Tips_key     1.0000    0.2812    0.4390        32
+        Total_value     0.7347    0.6441    0.6864       576
+          Total_key     0.8818    0.7691    0.8216       485
+             Others     0.8876    0.9069    0.8971      6540
+
+           accuracy                         0.9057     19267
+          macro avg     0.9136    0.8031    0.8293     19267
+       weighted avg     0.9049    0.9057    0.9036     19267

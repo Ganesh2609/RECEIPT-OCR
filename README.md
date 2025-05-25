@@ -163,76 +163,11 @@ nvidia-smi
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/layoutlm-gnn.git
+git clone https://github.com/Ganesh2609/RECEIPT-OCR.git
 cd RECEIPT-OCR
 
 # Install dependencies
 pip install torch torch-geometric transformers networkx matplotlib seaborn scikit-learn tqdm opencv-python pillow flask sqlalchemy
-```
-
-### Additional Requirements
-```bash
-# For advanced features
-pip install torchvision timm sentence-transformers google-generativeai
-```
-
-## 💻 Usage
-
-### Quick Start
-```bash
-# Prepare your data
-python Advanced\ Pipeline/receipt_graph_dataset.py \
-    --train_file train.txt \
-    --test_file test.txt \
-    --output_dir ./data_layoutlm
-
-# Train the model
-python Advanced\ Pipeline/train_layoutlm_gnn.py \
-    --data_dir ./data_layoutlm \
-    --train_file train.txt \
-    --test_file test.txt \
-    --use_gat \
-    --attention_heads 8 \
-    --hidden_channels 256 \
-    --num_layers 3 \
-    --use_edge_features \
-    --class_weighting \
-    --learning_rate 5e-5 \
-    --epochs 100 \
-    --output_dir ./results_layoutlm
-```
-
-### Advanced Training with Image Features
-```bash
-# Train with vision features
-python Advanced\ Pipeline/train_bert_gnn.py \
-    --data_dir ./data_layoutlm \
-    --train_file train.txt \
-    --test_file test.txt \
-    --images_dir ./receipt_images \
-    --vision_model vit \
-    --use_image_features \
-    --bert_model bert-base-uncased \
-    --max_seq_length 512 \
-    --hidden_channels 256 \
-    --gnn_layers 2 \
-    --use_gat \
-    --gnn_heads 8 \
-    --dropout 0.3 \
-    --learning_rate 3e-5 \
-    --scheduler cosine \
-    --output_dir ./results_vision_bert_gnn
-```
-
-### Resume Training
-```bash
-# Resume from checkpoint
-python Advanced\ Pipeline/train_layoutlm_gnn.py \
-    --data_dir ./data_layoutlm \
-    --train_file train.txt \
-    --test_file test.txt \
-    --resume \
-    --output_dir ./results_layoutlm
 ```
 
 ## 🔬 Model Architecture Details
